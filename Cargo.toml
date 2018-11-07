@@ -1,0 +1,13 @@
+[package]
+name = "disqus-to-hypothesis"
+version = "0.1.0"
+authors = ["Jichao Ouyang <oyanglulu@gmail.com>"]
+
+[dependencies]
+serde = "1.0.80"
+serde_derive = "1.0.80"
+serde-xml-rs = "0.2.1"
+
+[[bin]]
+name = "disqus-to-hypothesis"
+path = "main.rs"
