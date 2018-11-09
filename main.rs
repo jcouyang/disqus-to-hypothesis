@@ -61,7 +61,8 @@ struct Config {
 
 impl Config {
     pub fn new(args: Vec<String>) -> Result<Config, std::env::VarError>{
-        if args.len() < 1 {
+        if args.len() < 2 {
+            eprintln!("not enough args");
             return Err(std::env::VarError::NotPresent)
         }
         let token = env::var("H_TOKEN")?;
