@@ -53,6 +53,26 @@ struct Annotation {
     tags: Vec<String>
 }
 
+struct Config {
+    pub h_url: String,
+    pub filename: String,
+    pub token: String
+}
+
+impl Config {
+    pub fn new(args: Vec<String>) -> Result<Config, std::env::VarError>{
+        if args.len() < 1 {
+            return Err(std::env::VarError::NotPresent)
+        }
+        let token = env::var("H_TOKEN")?;
+        let h_url = match env::var("H_URL") {
+            Ok(url) => url,
+            _ => String::from("https://hypothes.is")
+        };
+        let filename = args[1].clone();
+        Ok(Config { h_url, filename, token})
+    }
+}
 fn composeAnnotation(disqus: &Disqus) -> Vec<Annotation> {
     disqus.post.iter()
         .map(|ref p|{
@@ -69,18 +89,18 @@ fn composeAnnotation(disqus: &Disqus) -> Vec<Annotation> {
 }
 
 fn main() {
-    let args:Vec<String> = env::args().collect();
-    let filename = &args[1];
-
+    let args: Vec<String> = env::args().collect();
+    let config = Config::new(args).unwrap();
     let data: Disqus = deserialize(
-        fs::read_to_string(filename)
+        fs::read_to_string(config.filename)
             .unwrap()
             .replace("dsq:id", "dsqid")
             .as_bytes()
     ).unwrap();
     let client = reqwest::Client::new();
+    let hurl = config.h_url + "/api/annotations";
     for anno in composeAnnotation(&data).iter() {
-        println!("{:?}",client.post("http://httpbin.org/post")
+        println!("{:?}",client.post(hurl.as_str())
                 .body(serde_json::to_string(anno).unwrap())
                 .send());
 
