@@ -8,6 +8,13 @@
 3. get hypothesis dev token from https://hypothes.is/account/developer
 
 4. [[https://github.com/jcouyang/disqus-to-hypothesis/releases/tag/1.0.0][download]] and run the command
+
+*** Linux
 #+BEGIN_EXAMPLE
 env H_TOKEN=<token from step 3> ./disqus-to-hypothesis ./disqus/export.xml
+#+END_EXAMPLE
+
+*** Windows
+#+BEGIN_EXAMPLE
+wsl bash -c "env H_TOKEN=<token from step 3> ./disqus-to-hypothesis"
 #+END_EXAMPLE
