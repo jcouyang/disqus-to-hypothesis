@@ -1,0 +1,13 @@
+* Migrate Disqus Comments to Hypothes.is
+
+** Usage
+1. export disqus comments from https://<blogname>.disqus.com/admin/discussions/export/
+
+2. put the xml file somewhere e.g. =./disqus/export.xml=
+
+3. get hypothesis dev token from https://hypothes.is/account/developer
+
+4. download and run the command
+#+BEGIN_EXAMPLE
+env H_TOKEN=<token from step 3> ./disqus-to-hypothesis ./disqus/export.xml
+#+END_EXAMPLE
