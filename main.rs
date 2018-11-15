@@ -103,10 +103,18 @@ fn main() {
   let data: Disqus = decode_disqus(&config.filename).unwrap();
   let client = reqwest::Client::new();
   let hurl = config.h_url + "/api/annotations";
-  for anno in compose_annotation(&data).iter() {
-    println!("{:?}",client.post(hurl.as_str())
-             .body(serde_json::to_string(anno).unwrap())
-             .send());
-
-  }
+    let mut headers = reqwest::header::HeaderMap::new();
+    headers.insert(reqwest::header::AUTHORIZATION, format!("Bearer {}", config.token).parse().unwrap());
+    headers.insert(reqwest::header::CONTENT_TYPE, "application/json".parse().unwrap());
+    for anno in compose_annotation(&data).iter() {
+       let result = client.post(hurl.as_str())
+          .headers(headers.clone())
+          .body(serde_json::to_string(anno).unwrap())
+            .send();
+        match result {
+            Ok(_) => print!("."),
+            Err(e) => print!("x{:?}", e)
+        }
+    }
+    print!("\n🖖")
 }
